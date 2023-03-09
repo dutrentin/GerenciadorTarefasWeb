@@ -1,0 +1,207 @@
+widget.ui-widget {
+	font-size: 100% !important;	
+}
+
+
+.ui-tabmenu .ui-tabmenu-nav {
+    background-color: white !important;
+}
+
+.fundoPrincipal{
+	background-color: white !important;
+	font-family: monospace;
+}
+
+.ui-state-default{
+	background-color: white !important;	
+}
+
+.rowIndex1{
+	height: 12px !important;
+}
+
+
+.row1{
+	height: 30px ;
+}
+
+.columnTexto{
+	padding-left: 8px;
+}
+
+.ui-widget-header {
+    background: transparent !important;
+}
+
+.ui-layout-container{
+  background-color: white !important;
+}
+
+.ui-password-panel-inline{
+	width: 400px !important;
+}
+
+.ui-widget-header {
+  border: 0px solid #56585C;
+  background-color: transparent !important;
+  color: white;
+  font-weight: bold;
+  padding-top: 20px;
+}
+
+.ui-fileupload-content {
+    background-color: transparent !important;
+}
+
+.ui-datatable-tablewrapper {
+	overflow: inherit !important;
+	background-color: transparent !important;
+}
+
+.columnMenu{
+	text-align: center;
+}
+.ui-panelgrid-cell{
+	border-color: transparent !important;
+	border: none !important;
+}
+
+.ui-layout-unit .ui-layout-unit-content {
+    overflow:inherit !important;
+}
+
+.ui-paginator .ui-paginator-current, .ui-paginator .ui-paginator-rpp-options {
+  margin-left: 4em;
+/*   margin-right: 1m; */
+  margin-top: 10px !important;
+  width: 80px !important;
+  visibility:false !important;
+  text-align: center !important;
+  background-image: none;
+}
+
+.ui-layout-container {
+    width: 100% !important;
+}
+.ui-panel {
+    padding: 0.2em;
+    visibility: hidden !important;
+}
+
+.botaoMenuSuperior {
+	border: 0px !important;
+	margin: 0px !important;
+	border-top-color: blue !important;
+	border-color: transparent !important;
+    background: orange !important;
+    background-color: botaoMenuSuperior !important;
+    height: 30px !important;]
+    width : 80px !important;
+    min-width: 100px !important;
+    vertical-align: middle !important;
+    text-decoration: blink !important;
+    font-weight: bold !important;
+}
+
+#mainFooter {
+	font-family: Verdana,sans-serif;
+	color: grey;
+	font-size: 10px;
+	font-weight: bolder;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    border: 4px solid white !important;;
+}
+
+.ui-widget-content{
+	border: none !important; 
+}
+
+.panelTopo{
+	border: none !important;
+	margin-left: 100px !important;
+}
+
+.textCenterDefault{
+	font:inherit;
+	font-size: 8px !important;
+	font-weight: normal !important;
+}
+
+#panelSubTopo{
+	border: none !important;
+}
+
+#mainSubMenu {
+	color: grey;
+	font-size: 15px;
+}
+
+#selectCidade {
+	width: 400px !important;
+	position: absolute !important;
+}
+
+.botaoBusca{
+/* 	float: right !important; */
+/* 	background-color: green !important;  */
+	border: none !important;
+	margin-top:0px;
+}
+..ui-button-text-only .ui-button-text {
+    background: orange !important; 
+    background-color: orange !important; 
+}
+
+#botaoSair {
+    float: left;
+    font-size: 13px !important;
+    margin-top: -10px;
+    margin-left: 15px !important;
+}
+
+#mainHeader {
+	font-family: monospace,sans-serif;
+	color: #61537F;
+	font-size: 60px;
+	font-weight: bolder;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    border: 1px solid #a3a3a3 !important;
+}
+
+
+.ui-messages-info, .ui-message-info {
+    color: #EAEAEA !important;
+    background-color: #003467 !important;
+}
+
+.ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem {
+	width: 19.3% !important;
+/* 	background-color: #003467 !important; */
+	background: #003467 !important;
+}
+
+.ui-menuitem-text{
+	text-align: center !important;
+	text-indent: inherit;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    color: #003467;
+}
+
+.ui-datatable tr.ui-state-highlight {
+    background-color: #aed7ff !important;
+}
+
+.ui-messages-info, .ui-message-info {
+    color: #EAEAEA !important;
+    font-weight: bolder;
+    background-color: #77828E !important;
+}
+
+
+

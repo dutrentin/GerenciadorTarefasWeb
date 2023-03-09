@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<body>
+	<ui:composition>
+		<div id="mainMenu">
+			<h:form>
+				<p:panelMenu>
+					<p:submenu label="Cadastro">
+<!-- 			            <p:menuitem value="Carro" url="/pages/carro/list.faces" style="font-size: 12px;font-weight: bolder;" -->
+<!-- 			            			icon="ui-icon-note" /> -->
+			            <p:menuitem value="Peça" url="/pages/peca/list.faces" style="font-size: 12px;font-weight: bolder;"
+			            			icon="ui-icon-note" />
+			             <p:menuitem value="Sub-Peça" url="/pages/subPeca/list.faces" style="font-size: 12px;font-weight: bolder;"
+			            			icon="ui-icon-note" />
+			        </p:submenu>
+			       
+			        <p:submenu label="Configurações">
+			       		<p:menuitem value="Usuário" url="/pages/user/list.faces" style="font-size: 12px;font-weight: bolder;"  
+			            			icon="ui-icon-person" />
+			            <p:menuitem value="#{labels.menu_language}" url="/pages/settings/language.faces" style="font-size: 12px;font-weight: bolder;"  rendered="false"
+			             	ajax="false" icon="ui-icon-wrench" />
+			            <p:menuitem value="#{labels.logout}" url="/j_spring_security_logout" style="font-size: 12px;font-weight: bolder;"
+			             	ajax="false" icon="ui-icon-wrench" />
+			        </p:submenu>
+			    </p:panelMenu>
+		    </h:form>
+		</div>
+	</ui:composition>
+</body>
+</html>
