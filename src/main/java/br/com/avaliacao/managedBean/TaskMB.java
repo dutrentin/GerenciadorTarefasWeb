@@ -21,6 +21,9 @@ import br.com.avaliacao.utils.UtilsEnum;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import br.com.avaliacao.utils.BaseBeans;
 import br.com.avaliacao.utils.FilterTask;
 import br.com.avaliacao.utils.LoadConfigs;
@@ -97,7 +100,17 @@ public class TaskMB extends BaseBeans{
 				uri.append(filter.getOrder() + "/");
 				
 				try{
-					task = target.path(uri.toString()).request().get(Task.class);
+					Response res = target.path("/tarefas/findAll/10/0/2")
+					        .request(MediaType.APPLICATION_JSON)
+					        .get();
+					int status = res.getStatus();
+				    String json = res.readEntity(String.class);
+				    
+				    Gson gson = new Gson();
+				    
+				    List<Task> retorno = gson.fromJson(json, new TypeToken<List<Task>>(){}.getType());
+				    task.setTasks(retorno);
+					//task = target.path(uri.toString()).request().get(Task.class);
 				}catch(Exception ex){
 					getMessageErrorConnect();
 					System.out.println();
@@ -106,7 +119,7 @@ public class TaskMB extends BaseBeans{
 					tasks.removeAll(tasks);
 					tasks.addAll(task.getTasks());
 				}
-				
+				task.setTotalSize(2);
 				setRowCount(task.getTotalSize());
 				
 				return tasks;

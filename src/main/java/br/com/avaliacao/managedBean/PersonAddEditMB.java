@@ -1,6 +1,5 @@
 package br.com.avaliacao.managedBean;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import javax.annotation.PostConstruct;
@@ -13,15 +12,13 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import br.com.avaliacao.model.Person;
-import br.com.avaliacao.utils.UtilsEnum;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
+import br.com.avaliacao.model.Person;
 import br.com.avaliacao.utils.BaseBeans;
-import br.com.avaliacao.utils.FileUtils;
 import br.com.avaliacao.utils.LoadConfigs;
+import br.com.avaliacao.utils.UtilsEnum;
 
 @SessionScoped
 @ManagedBean(name="personAddEditMB")
@@ -211,21 +208,6 @@ public class PersonAddEditMB extends BaseBeans {
 	}
 	
 	public StreamedContent getImagePhoto() throws IOException {
-		DefaultStreamedContent retorno = null;
-//		person.setId(1L);
-		if(person.getFoto() != null){
-			retorno = new DefaultStreamedContent(new ByteArrayInputStream(person.getFoto()));
-			retorno.setName("Foto");
-			retorno.setContentEncoding("UTF-8");
-//			retorno.setContentType("image/png");
-			return retorno;
-		}
-		
-        if(person == null || person.getFoto() == null){
-        	System.out.println("Sem foto");
-        }else{
-        	return new DefaultStreamedContent(new ByteArrayInputStream(person.getFoto()));
-        }
 		return null;
 	}
 	
@@ -234,8 +216,7 @@ public class PersonAddEditMB extends BaseBeans {
 	}
 
 	public void fileUploadHandlerLogo(FileUploadEvent event) throws Exception {
-		photo = FileUtils.toByteArray(event);
-		person.setFoto(photo);
+		
 	}
 	
 	public Person getPerson() {

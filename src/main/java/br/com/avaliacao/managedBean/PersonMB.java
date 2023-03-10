@@ -85,10 +85,6 @@ public class PersonMB extends BaseBeans{
 					getMessageErrorConnect();
 					System.out.println();
 				}
-				if(person != null && person.getPersons() != null){
-					persons.removeAll(persons);
-					persons.addAll(person.getPersons());
-				}
 				
 				setRowCount(person.getTotalSize());
 				
