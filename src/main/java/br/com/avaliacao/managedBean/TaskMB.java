@@ -20,6 +20,9 @@ import br.com.avaliacao.model.Task;
 import br.com.avaliacao.utils.UtilsEnum;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -42,7 +45,8 @@ public class TaskMB extends BaseBeans{
 	private SimpleDateFormat formatter = new SimpleDateFormat("dd_MM_yyyy");
 	
 	private LazyDataModel<Task> model;
-	Task task;
+	private Task task;
+	private Gson gson = new Gson();
 	
 	@PostConstruct
 	public void onLoad() {
@@ -103,14 +107,13 @@ public class TaskMB extends BaseBeans{
 					Response res = target.path("/tarefas/findAll/10/0/2")
 					        .request(MediaType.APPLICATION_JSON)
 					        .get();
-					int status = res.getStatus();
+					
 				    String json = res.readEntity(String.class);
 				    
-				    Gson gson = new Gson();
 				    
 				    List<Task> retorno = gson.fromJson(json, new TypeToken<List<Task>>(){}.getType());
+				    
 				    task.setTasks(retorno);
-					//task = target.path(uri.toString()).request().get(Task.class);
 				}catch(Exception ex){
 					getMessageErrorConnect();
 					System.out.println();
@@ -174,17 +177,30 @@ public class TaskMB extends BaseBeans{
 	}
 	
 	private boolean saveMethod() {
+		
 		task.setStatus(true);
-		Entity<Task> entity = Entity.entity(task, MediaType.APPLICATION_XML);
-		Response response = null;
+		RestTemplate template = new RestTemplate();
+		UriComponents uri = UriComponentsBuilder.newInstance()
+				.scheme("http")
+				.host("localhost:8080")
+				.path("/tarefas-api")
+				.build();
+		
+		template.postForEntity("http://localhost:8080/tarefas-api/tarefas/save", task, Task.class);
+		
+		Response respTask = null;
 		try{
-			response = target.path("/tasks").request().post(entity);
+			respTask= target.path("/tarefas/save").request()
+					.post(Entity.entity(task, MediaType.APPLICATION_JSON));
+			System.out.println("");
+			
 		}catch(Exception ex){
+			ex.printStackTrace();
 			getMessageErrorConnect();
 			return false;
 		}
 		
-		boolean returnValue = validateReturn(response);
+		boolean returnValue = validateReturn(respTask);
 			return returnValue;
 	}
 

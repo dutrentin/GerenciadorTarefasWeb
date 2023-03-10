@@ -14,16 +14,16 @@
 				
 				<br></br>
 				<div align="left">
-					<h:outputLabel for="name" style="font: bold;font-weight: bolder" value="Cadastro de Pessoa" />
+					<h:outputLabel for="name" style="font: bold;font-weight: bolder" value="Listagem de Tarefas" />
 				</div>
 				<br></br>
 					<p:fieldset legend="Filtros">
 						<p:panelGrid styleClass="size-form" style="width: 100% !important;">
 						    <p:row>
 						        <p:column>
-						        	<p:outputLabel>Nome</p:outputLabel><br></br>
+						        	<p:outputLabel>Descrição</p:outputLabel><br></br>
 						        	<p:inputText value="#{taskMB.filter.filterTitle}" id="txtNome"
-									      	placeholder="Filtre por nome. (Digite enter para enviar o comando de busca)" styleClass="form-control input-lg input-custom" />
+									      	placeholder="Filtre por descrição. (Digite enter para enviar o comando de busca)" styleClass="form-control input-lg input-custom" />
 								</p:column>
 						        <p:column >
 						    	    <p:outputLabel>Situação</p:outputLabel><br></br>
