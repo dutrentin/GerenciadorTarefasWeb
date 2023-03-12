@@ -16,13 +16,10 @@ public class Person implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
+	private Integer id;
 	
-	private String nome;
-	private String cpf;
-	private Date dataNascimento;
+	private String name;
 	private String email;
-	private byte[] foto;
 	@XmlElement(name="persons")
 	private List<Person> persons;
 	@Transient
@@ -30,15 +27,14 @@ public class Person implements Serializable{
 	
 	private boolean ativo;
 	
-	public Person(String nome, String cpf, Date dataNascimento, String email) {
+	public Person(Integer id, String name, String email) {
 		super();
-		this.nome = nome;
-		this.cpf = cpf;
-		this.dataNascimento = dataNascimento;
+		this.id = id;
+		this.name = name;
 		this.email = email;
 	}
 	
-	public Person(Long id) {
+	public Person(Integer id) {
 		this.id = id;
 	}
 	
@@ -46,17 +42,11 @@ public class Person implements Serializable{
 		
 	}
 
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-	public String getCpf() {
-		return cpf;
-	}
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
+	public void setName(String name) {
+		this.name = name;
 	}
 	public String getEmail() {
 		return email;
@@ -65,28 +55,12 @@ public class Person implements Serializable{
 		this.email = email;
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public byte[] getFoto() {
-		return foto;
-	}
-
-	public void setFoto(byte[] foto) {
-		this.foto = foto;
-	}
-
-	public Date getDataNascimento() {
-		return dataNascimento;
-	}
-
-	public void setDataNascimento(Date dataNascimento) {
-		this.dataNascimento = dataNascimento;
 	}
 
 	public List<Person> getPersons() {

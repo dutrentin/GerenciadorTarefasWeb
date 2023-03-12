@@ -14,7 +14,10 @@ import javax.ws.rs.core.Response;
 
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.StreamedContent;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
+import br.com.avaliacao.dto.PersonTransferDTO;
 import br.com.avaliacao.model.Person;
 import br.com.avaliacao.utils.BaseBeans;
 import br.com.avaliacao.utils.LoadConfigs;
@@ -30,11 +33,13 @@ public class PersonAddEditMB extends BaseBeans {
 	private byte[] photo;
 	private WebTarget target;
 	private boolean isEdit;
+	private String hostPath;
+	private RestTemplate template = new RestTemplate();
 	
 	
 	@PostConstruct
 	public void PersonAddEditMB(){
-		target = LoadConfigs.loadConfigs();
+		hostPath = LoadConfigs.getHostPath();
 			
 		if(person == null){
 			person = new Person();
@@ -110,8 +115,29 @@ public class PersonAddEditMB extends BaseBeans {
 	
 	public String delete(){
 		person.setAtivo(false);
-		edit(false);
+		deletePerson();
+		//edit(false);
 		return "/public/listPerson.faces?faces-redirect=true";
+	}
+	
+	private void deletePerson() {
+		try {
+			
+		StringBuilder uri = new StringBuilder();
+		uri.append("/persons/remove/");
+		uri.append(person.getId());
+		ResponseEntity<PersonTransferDTO> retornoPersonTransfer = null;
+		
+		template = new RestTemplate();
+
+		template.delete(hostPath + uri.toString());
+		
+		System.out.print("Removido");
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 	public boolean edit(boolean ehEdicao){

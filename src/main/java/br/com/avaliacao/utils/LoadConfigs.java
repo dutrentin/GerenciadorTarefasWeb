@@ -21,5 +21,9 @@ public class LoadConfigs {
 		urlApiRest = UtilResource.getResourceProperty("config", "hotname_api_restful");
 		return target = client.target(urlApiRest);
 	}
+	
+	public static String getHostPath() {
+		return UtilResource.getResourceProperty("config", "hotname_api_restful");
+	}
 
 }

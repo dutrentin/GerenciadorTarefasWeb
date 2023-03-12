@@ -5,7 +5,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:p="http://primefaces.org/ui" template="main.xhtml">
+	xmlns:p="http://primefaces.org/ui"  template="../main.xhtml">
 	
 	<ui:define name="content">
 	
@@ -14,7 +14,7 @@
 				
 				<br></br>
 				<div align="left">
-					<h:outputLabel for="name" style="font: bold;font-weight: bolder" value="Cadastro de Pessoa" />
+					<h:outputLabel for="name" style="font: bold;font-weight: bolder" value="Listagem de Pessoas" />
 				</div>
 				<br></br>
 					<p:fieldset legend="Filtros">
@@ -62,21 +62,11 @@
 							currentPageReportTemplate="(Pessoas: {startRecord} - {endRecord} de total: {totalRecords} -  Página: {currentPage}/{totalPages})" >
 							
 						    <p:column headerText="Nome">
-						        <h:outputText value="#{person.nome}" />
-						    </p:column>
-						    
-						    <p:column headerText="CPF">
-						        <h:outputText value="#{person.cpf}" />
+						        <h:outputText value="#{person.name}" />
 						    </p:column>
 						    
 						    <p:column headerText="E-mail">
 						        <h:outputText value="#{person.email}" />
-						    </p:column>
-						    
-						    <p:column headerText="Data Nasc.">
-							    <h:outputText value="#{person.dataNascimento}">
-								  <f:convertDateTime pattern="dd/MM/yyyy"/>
-								</h:outputText>
 						    </p:column>
 						    
 						    <p:column width="5%" style="max-width:30px" >

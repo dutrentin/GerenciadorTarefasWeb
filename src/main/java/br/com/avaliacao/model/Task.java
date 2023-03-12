@@ -13,8 +13,9 @@ public class Task implements Serializable{
 	private boolean status;
 	private String description;
 	private Date creationDate;
-	private Date dateLastEdited;
+	private Date dateTask;
 	private Date dateConclusion;
+	private Person person;
 	
 	
 	private List<Task> tasks;
@@ -79,12 +80,12 @@ public class Task implements Serializable{
 		this.creationDate = creationDate;
 	}
 
-	public Date getDateLastEdited() {
-		return dateLastEdited;
+	public Date getDateTask() {
+		return dateTask;
 	}
 
-	public void setDateLastEdited(Date dateLastEdited) {
-		this.dateLastEdited = dateLastEdited;
+	public void setDateTask(Date dateTask) {
+		this.dateTask = dateTask;
 	}
 
 	public Date getDateConclusion() {
@@ -94,6 +95,16 @@ public class Task implements Serializable{
 	public void setDateConclusion(Date dateConclusion) {
 		this.dateConclusion = dateConclusion;
 	}
+
+	public Person getPerson() {
+		return person;
+	}
+
+	public void setPerson(Person person) {
+		this.person = person;
+	}
+	
+	
 	
 	
 }

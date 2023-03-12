@@ -16,16 +16,19 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import br.com.avaliacao.dto.PersonDTO;
+import br.com.avaliacao.dto.PersonTransferDTO;
+import br.com.avaliacao.dto.TaskDTO;
+import br.com.avaliacao.dto.TaskTransferDTO;
+import br.com.avaliacao.model.Person;
 import br.com.avaliacao.model.Task;
 import br.com.avaliacao.utils.UtilsEnum;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import br.com.avaliacao.utils.BaseBeans;
 import br.com.avaliacao.utils.FilterTask;
@@ -39,6 +42,7 @@ public class TaskMB extends BaseBeans{
 	
 	private List<Task> tasks;
 	private WebTarget target;
+	private String hostPath;
 	private FilterTask filter;
 	private String statusSelectedString;
 	private boolean isEdit;
@@ -46,11 +50,18 @@ public class TaskMB extends BaseBeans{
 	
 	private LazyDataModel<Task> model;
 	private Task task;
-	private Gson gson = new Gson();
+	private RestTemplate template = new RestTemplate();
+	
+	private Integer selectedPerson;
+	private Person personSelected;
 	
 	@PostConstruct
 	public void onLoad() {
+		personSelected = new Person();
 		target = LoadConfigs.loadConfigs();
+		
+		hostPath = LoadConfigs.getHostPath();
+		
 		if(statusSelectedString == null){
 			statusSelectedString = "true";
 		}
@@ -78,6 +89,7 @@ public class TaskMB extends BaseBeans{
 					SortOrder sortOrder, Map<String, String> filters) {
 				
 				System.out.println("Nova requisição de tarefas");
+				
 				if(statusSelectedString.equals("true")){
 					filter.setFilterStatus(true);
 				}else{
@@ -87,10 +99,14 @@ public class TaskMB extends BaseBeans{
 				validateEmptyFilters(sortOrder);
 				StringBuilder uri = new StringBuilder();
 				uri.append("/tasks/findAll/");
+				
+				
 				uri.append(maxResults + "/");
 				uri.append(first + "/");
+				/*
 				uri.append(filter.getFilterTitle() + "/");
 				uri.append(filter.isFilterStatus() + "/");
+				
 				String dateFormatCreation = null;
 				if(filter.getCreationDate() != null){
 					dateFormatCreation = formatter.format(filter.getCreationDate());
@@ -102,18 +118,38 @@ public class TaskMB extends BaseBeans{
 				}
 				uri.append(dateFormatConclusion + "/");
 				uri.append(filter.getOrder() + "/");
+				*/
 				
 				try{
-					Response res = target.path("/tarefas/findAll/10/0/2")
-					        .request(MediaType.APPLICATION_JSON)
-					        .get();
+				    List<Task> tasksReturn = new ArrayList<>();
+				    
+				    
+				    ResponseEntity<TaskTransferDTO> retornoTaskTransfer = null;
+					template = new RestTemplate();
 					
-				    String json = res.readEntity(String.class);
+					retornoTaskTransfer = template.getForEntity(hostPath + uri.toString() +"2", TaskTransferDTO.class);
+					
+					TaskTransferDTO taskTransferDTO = retornoTaskTransfer.getBody();
+				    
+				    if(taskTransferDTO != null && taskTransferDTO.getTasks() != null && !taskTransferDTO.getTasks().isEmpty()) {
+				    	for(TaskDTO taskDTO : taskTransferDTO.getTasks()) {
+				    		taskDTO.getCreationDate();
+				    		
+				    		Task task = new Task();
+				    		task.setCreationDate(taskDTO.getCreationDate());
+				    		task.setId(taskDTO.getId());
+				    		task.setDescription(taskDTO.getDescription());
+				    		task.setTitle(taskDTO.getTitle());
+				    		//task.setDateLastEdited(null)
+				    		task.setStatus(true);
+				    		
+				    		tasksReturn.add(task);
+				    	}
+				    }
 				    
 				    
-				    List<Task> retorno = gson.fromJson(json, new TypeToken<List<Task>>(){}.getType());
 				    
-				    task.setTasks(retorno);
+				    task.setTasks(tasksReturn);
 				}catch(Exception ex){
 					getMessageErrorConnect();
 					System.out.println();
@@ -159,6 +195,28 @@ public class TaskMB extends BaseBeans{
 		return "/public/addTask.faces?faces-redirect=true";
 	}
 
+	public List<Person> completeTextPerson(String query){
+		
+		ResponseEntity<PersonTransferDTO> respUsers = null;
+		template = new RestTemplate();
+		
+		respUsers = template.getForEntity(hostPath + "/users/list", PersonTransferDTO.class);
+		
+		PersonTransferDTO personTransferDTO = respUsers.getBody();
+		
+		List<Person> returnList = new ArrayList<>();
+		
+		if(personTransferDTO != null && personTransferDTO.getPersons() != null && !personTransferDTO.getPersons().isEmpty()) {
+			for(PersonDTO personDTO : personTransferDTO.getPersons()) {
+				
+				returnList.add(new Person(personDTO.getId(), personDTO.getName(), personDTO.getEmail()));
+			}
+		}
+		
+		return returnList;
+		
+	}
+	
 	
 	public String redirectListTask() throws IOException{
 		clean();
@@ -179,20 +237,21 @@ public class TaskMB extends BaseBeans{
 	private boolean saveMethod() {
 		
 		task.setStatus(true);
-		RestTemplate template = new RestTemplate();
-		UriComponents uri = UriComponentsBuilder.newInstance()
-				.scheme("http")
-				.host("localhost:8080")
-				.path("/tarefas-api")
-				.build();
 		
-		template.postForEntity("http://localhost:8080/tarefas-api/tarefas/save", task, Task.class);
-		
-		Response respTask = null;
+		ResponseEntity<Task> respTask = null;
 		try{
-			respTask= target.path("/tarefas/save").request()
-					.post(Entity.entity(task, MediaType.APPLICATION_JSON));
-			System.out.println("");
+			template = new RestTemplate();
+			UriComponents uri = UriComponentsBuilder.newInstance()
+					.host(hostPath)
+					.path("/tasks/save")
+					.build();
+			
+			uri.getFragment();
+			uri.getHost();
+			uri.getPath();
+			uri.getUserInfo();
+			
+			respTask = template.postForEntity(hostPath + "/tasks/save", task, Task.class);
 			
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -204,9 +263,9 @@ public class TaskMB extends BaseBeans{
 			return returnValue;
 	}
 
-	private boolean validateReturn(Response response) {
-		if(response != null){
-			if(response.getStatus() == UtilsEnum.OK.value || response.getStatus() == UtilsEnum.CRIADO.value){
+	private boolean validateReturn(ResponseEntity<Task> respTask) {
+		if(respTask != null){
+			if(respTask.getStatusCode().value() == UtilsEnum.OK.value || respTask.getStatusCode().value() == UtilsEnum.CRIADO.value){
 				getMessageAddSuccess();
 			}else{
 				getMessageAddError();
@@ -228,9 +287,13 @@ public class TaskMB extends BaseBeans{
 		try{
 			if(task.getId() != null){
 				if(ehEdicao){
+					
+					
 					entity = Entity.entity(task, MediaType.APPLICATION_XML);
 					response = target.path("/tasks").request().put(entity);
 				}else{
+					
+					
 					task.setStatus(false);
 					entity = Entity.entity(task, MediaType.APPLICATION_XML);
 					response = target.path("/tasks").request().put(entity);
@@ -337,6 +400,19 @@ public class TaskMB extends BaseBeans{
 		task = new Task();
 	}
 	
+	private Person returnPersonById() {
+		Person person = new Person();
+		
+		ResponseEntity<PersonTransferDTO> respUsers = null;
+		template = new RestTemplate();
+		
+		respUsers = template.getForEntity(hostPath + "/users/list", PersonTransferDTO.class);
+		
+		PersonTransferDTO personTransferDTO = respUsers.getBody();
+		return person;
+		
+	}
+	
 	public List<Task> getTasks() {
 		return tasks;
 	}
@@ -373,4 +449,25 @@ public class TaskMB extends BaseBeans{
 	public void setEdit(boolean isEdit) {
 		this.isEdit = isEdit;
 	}
+
+	public Integer getSelectedPerson() {
+		return selectedPerson;
+	}
+
+	public void setSelectedPerson(Integer selectedPerson) {
+		this.selectedPerson = selectedPerson;
+	}
+
+	public Person getPersonSelected() {
+		return personSelected;
+	}
+
+	public void setPersonSelected(Person personSelected) {
+		this.personSelected = personSelected;
+	}
+	
+	
+
+	
+	
 }
