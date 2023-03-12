@@ -1,17 +1,10 @@
 package br.com.avaliacao.model;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Person implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -20,7 +13,7 @@ public class Person implements Serializable{
 	
 	private String name;
 	private String email;
-	@XmlElement(name="persons")
+	
 	private List<Person> persons;
 	@Transient
 	private int totalSize;

@@ -16,9 +16,12 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.StreamedContent;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.avaliacao.dto.PersonTransferDTO;
 import br.com.avaliacao.model.Person;
+import br.com.avaliacao.model.Task;
 import br.com.avaliacao.utils.BaseBeans;
 import br.com.avaliacao.utils.LoadConfigs;
 import br.com.avaliacao.utils.UtilsEnum;
@@ -49,52 +52,58 @@ public class PersonAddEditMB extends BaseBeans {
 		}
 	}
 	
-	public String saveOrEdit(){
+	public String saveOrEdit() throws IOException{
 		boolean returnMethod = true;
 		if(person != null){
 			if(person.getId() == null || person.getId() == 0){
 				returnMethod = saveMethod();
 			}else{
-				returnMethod = edit(true);
+				returnMethod = edit();
 			}
 		}
-//		if(!returnMethod){
-//			return "/public/addPerson.faces?faces-redirect=true";
-//		}
 		if(returnMethod){
 			clean();
 		}
-		return "/public/addPerson.faces?faces-redirect=true";
+		return redirectListPerson();
 	}
 
 	
 	public String redirectListPerson() throws IOException{
 		clean();
-		return "/public/listPerson.faces?faces-redirect=true";
+		return "/public/person/listPerson.faces?faces-redirect=true";
 	}
 	
 	public String redirectCadPerson() throws IOException{
 		clean();
-		return "/public/cadPerson.faces?faces-redirect=true";
+		return "/public/person/cadPerson.faces?faces-redirect=true";
 	}
 	
 	public String redirectEditPerson(){
-		return "/public/cadPerson.faces?faces-redirect=true";
+		return "/public/person/cadPerson.faces?faces-redirect=true";
 	}
 	
 	private boolean saveMethod() {
 		person.setAtivo(true);
-		Entity<Person> entity = Entity.entity(person, MediaType.APPLICATION_XML);
-		Response response = null;
+		ResponseEntity<Person> respPerson = null;
 		try{
-			response = target.path("/persons").request().post(entity);
+			StringBuilder uri = new StringBuilder();
+			uri.append("/persons/save");
+			
+			template = new RestTemplate();
+			//UriComponents uri = UriComponentsBuilder.newInstance()
+					//.host(hostPath)
+					//.path("/persons/save")
+					//.build();
+			
+			respPerson = template.postForEntity(hostPath + uri.toString(), person, Person.class);
+			
 		}catch(Exception ex){
+			ex.printStackTrace();
 			getMessageErrorConnect();
 			return false;
 		}
 		
-		boolean returnValue = validateReturn(response);
-			return returnValue;
+		return true;
 	}
 
 	private boolean validateReturn(Response response) {
@@ -116,56 +125,43 @@ public class PersonAddEditMB extends BaseBeans {
 	public String delete(){
 		person.setAtivo(false);
 		deletePerson();
-		//edit(false);
-		return "/public/listPerson.faces?faces-redirect=true";
+		return "/public/person/listPerson.faces?faces-redirect=true";
 	}
 	
 	private void deletePerson() {
 		try {
 			
-		StringBuilder uri = new StringBuilder();
-		uri.append("/persons/remove/");
-		uri.append(person.getId());
-		ResponseEntity<PersonTransferDTO> retornoPersonTransfer = null;
-		
-		template = new RestTemplate();
-
-		template.delete(hostPath + uri.toString());
-		
-		System.out.print("Removido");
+			StringBuilder uri = new StringBuilder();
+			uri.append("/persons/remove/");
+			uri.append(person.getId());
+			
+			template = new RestTemplate();
+	
+			template.delete(hostPath + uri.toString());
+			
 		}catch (Exception e) {
 			e.printStackTrace();
+			getMessageDeleteError();
 		}
-		
 		
 	}
 	
-	public boolean edit(boolean ehEdicao){
-		Response response  = null;
-		Entity<Person> entity = null;
+	public boolean edit(){
 		try{
-			if(person.getId() != null){
-				if(ehEdicao){
-					entity = Entity.entity(person, MediaType.APPLICATION_XML);
-					response = target.path("/persons").request().put(entity);
-				}else{
-					person.setAtivo(false);
-					entity = Entity.entity(person, MediaType.APPLICATION_XML);
-					response = target.path("/persons").request().put(entity);
-				}
-				System.out.println();
-			}
+			StringBuilder uri = new StringBuilder();
+			uri.append("/persons/update");
+			
+			template = new RestTemplate();
+	
+			template.put(hostPath + uri.toString(), person);
+			
 		}catch(Exception ex){
 			ex.printStackTrace();
-			if(ehEdicao){
 				getMessageEditError();
-			}else{
-				getMessageDeleteError();
-			}
 			return false;
 		}
 		
-		return returnEditMethod(ehEdicao, response);
+		return true;
 	}
 
 	private boolean returnEditMethod(boolean ehEdicao, Response response) {

@@ -186,7 +186,7 @@ public class TaskMB extends BaseBeans{
 			if(task.getId() == null || task.getId() == 0){
 				returnMethod = saveMethod();
 			}else{
-				returnMethod = edit(true);
+				returnMethod = edit();
 			}
 		}
 		if(returnMethod){
@@ -197,12 +197,12 @@ public class TaskMB extends BaseBeans{
 
 	public List<Person> completeTextPerson(String query){
 		
-		ResponseEntity<PersonTransferDTO> respUsers = null;
+		ResponseEntity<PersonTransferDTO> respPersons = null;
 		template = new RestTemplate();
 		
-		respUsers = template.getForEntity(hostPath + "/users/list", PersonTransferDTO.class);
+		respPersons = template.getForEntity(hostPath + "/persons/list", PersonTransferDTO.class);
 		
-		PersonTransferDTO personTransferDTO = respUsers.getBody();
+		PersonTransferDTO personTransferDTO = respPersons.getBody();
 		
 		List<Person> returnList = new ArrayList<>();
 		
@@ -277,41 +277,46 @@ public class TaskMB extends BaseBeans{
 	
 	public String delete(){
 		task.setStatus(false);
-		edit(false);
-		return "/public/listTask.faces?faces-redirect=true";
+		deleteTask();
+		return "/public/task/listTask.faces?faces-redirect=true";
 	}
 	
-	public boolean edit(boolean ehEdicao){
-		Response response  = null;
-		Entity<Task> entity = null;
+	private void deleteTask() {
+		try {
+			
+			StringBuilder uri = new StringBuilder();
+			uri.append("/tasks/remove/");
+			uri.append(task.getId());
+			
+			template = new RestTemplate();
+	
+			template.delete(hostPath + uri.toString());
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			getMessageDeleteError();
+		}
+		
+	}
+	
+	public boolean edit(){
 		try{
-			if(task.getId() != null){
-				if(ehEdicao){
-					
-					
-					entity = Entity.entity(task, MediaType.APPLICATION_XML);
-					response = target.path("/tasks").request().put(entity);
-				}else{
-					
-					
-					task.setStatus(false);
-					entity = Entity.entity(task, MediaType.APPLICATION_XML);
-					response = target.path("/tasks").request().put(entity);
-				}
-				System.out.println();
-			}
+			StringBuilder uri = new StringBuilder();
+			uri.append("/tasks/update");
+			
+			template = new RestTemplate();
+	
+			template.put(hostPath + uri.toString(), task);
+			
 		}catch(Exception ex){
 			ex.printStackTrace();
-			if(ehEdicao){
 				getMessageEditError();
-			}else{
-				getMessageDeleteError();
-			}
 			return false;
 		}
 		
-		return returnEditMethod(ehEdicao, response);
+		return true;
 	}
+
 	
 	public String changeStatus(){
 		Response response  = null;
