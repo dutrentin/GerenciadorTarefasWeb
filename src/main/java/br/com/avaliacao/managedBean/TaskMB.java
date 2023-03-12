@@ -246,7 +246,7 @@ public class TaskMB extends BaseBeans{
 					.path("/tasks/save")
 					.build();
 			
-			task.setPerson(personSelected);
+			task.setPerson(returnPersonById());
 			
 			
 			respTask = template.postForEntity(hostPath + "/tasks/save", task, Task.class);
@@ -406,12 +406,18 @@ public class TaskMB extends BaseBeans{
 	private Person returnPersonById() {
 		Person person = new Person();
 		
-		ResponseEntity<PersonTransferDTO> respUsers = null;
+		ResponseEntity<PersonDTO> respPerson = null;
 		template = new RestTemplate();
 		
-		respUsers = template.getForEntity(hostPath + "/persons/list", PersonTransferDTO.class);
+		respPerson = template.getForEntity(hostPath + "/persons/" + personSelected.getId(), PersonDTO.class);
 		
-		PersonTransferDTO personTransferDTO = respUsers.getBody();
+		if(respPerson.getBody() != null) {
+			person.setId(respPerson.getBody().getId());
+			person.setAtivo(true);
+			person.setEmail(respPerson.getBody().getEmail());
+			person.setName(respPerson.getBody().getName());	
+		}
+		
 		return person;
 		
 	}
