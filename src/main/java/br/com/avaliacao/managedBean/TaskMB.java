@@ -246,10 +246,8 @@ public class TaskMB extends BaseBeans{
 					.path("/tasks/save")
 					.build();
 			
-			uri.getFragment();
-			uri.getHost();
-			uri.getPath();
-			uri.getUserInfo();
+			task.setPerson(personSelected);
+			
 			
 			respTask = template.postForEntity(hostPath + "/tasks/save", task, Task.class);
 			
@@ -411,7 +409,7 @@ public class TaskMB extends BaseBeans{
 		ResponseEntity<PersonTransferDTO> respUsers = null;
 		template = new RestTemplate();
 		
-		respUsers = template.getForEntity(hostPath + "/users/list", PersonTransferDTO.class);
+		respUsers = template.getForEntity(hostPath + "/persons/list", PersonTransferDTO.class);
 		
 		PersonTransferDTO personTransferDTO = respUsers.getBody();
 		return person;
