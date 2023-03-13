@@ -3,6 +3,8 @@ package br.com.avaliacao.managedBean;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,13 +18,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import br.com.avaliacao.dto.PersonDTO;
-import br.com.avaliacao.dto.PersonTransferDTO;
-import br.com.avaliacao.dto.TaskDTO;
-import br.com.avaliacao.dto.TaskTransferDTO;
-import br.com.avaliacao.model.Person;
-import br.com.avaliacao.model.Task;
-import br.com.avaliacao.utils.UtilsEnum;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +25,16 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.avaliacao.dto.PersonDTO;
+import br.com.avaliacao.dto.PersonTransferDTO;
+import br.com.avaliacao.dto.TaskDTO;
+import br.com.avaliacao.dto.TaskTransferDTO;
+import br.com.avaliacao.model.Person;
+import br.com.avaliacao.model.Task;
 import br.com.avaliacao.utils.BaseBeans;
 import br.com.avaliacao.utils.FilterTask;
 import br.com.avaliacao.utils.LoadConfigs;
+import br.com.avaliacao.utils.UtilsEnum;
 
 @SessionScoped
 @ManagedBean(name="taskMB")
@@ -46,7 +48,7 @@ public class TaskMB extends BaseBeans{
 	private FilterTask filter;
 	private String statusSelectedString;
 	private boolean isEdit;
-	private SimpleDateFormat formatter = new SimpleDateFormat("dd_MM_yyyy");
+	private SimpleDateFormat formatter = new SimpleDateFormat("dd_MM_yyyy__HH_mm_s");
 	
 	private LazyDataModel<Task> model;
 	private Task task;
@@ -61,6 +63,7 @@ public class TaskMB extends BaseBeans{
 		target = LoadConfigs.loadConfigs();
 		
 		hostPath = LoadConfigs.getHostPath();
+		
 		
 		if(statusSelectedString == null){
 			statusSelectedString = "true";
@@ -96,14 +99,49 @@ public class TaskMB extends BaseBeans{
 					filter.setFilterStatus(false);
 				}
 				
-				validateEmptyFilters(sortOrder);
+				
+				
 				StringBuilder uri = new StringBuilder();
-				uri.append("/tasks/findAll/");
+				uri.append("/tasks/findAll/{max}/{page}/{idPerson}/{title}/{dateInitial}/{dateFinal}");
+				
+				Map<String, Object> uriVariables = new HashMap<String, Object>();
+				
+				uriVariables.put("max", String.valueOf(maxResults));
+				uriVariables.put("page", first);
+				uriVariables.put("idPerson", personSelected.getId() != null ? personSelected.getId() : 0);
+			    
+			    if(filter.getFilterTitle() != null && !filter.getFilterTitle().equals("")) {
+			    	uriVariables.put("title", filter.getFilterTitle());
+			    }else {
+			    	uriVariables.put("title", "-");
+			    }
+			    
+			    
+			    if(filter.getDateInitial() != null) {
+			    	uriVariables.put("dateInitial", formatter.format(filter.getDateInitial()));
+			    }else {
+			    	uriVariables.put("dateInitial", "-");
+			    }
+			    
+			    if(filter.getDateFinal() != null) {
+			    	uriVariables.put("dateInitial", formatter.format(filter.getDateFinal()));
+			    	uriVariables.put("dateFinal",filter.getDateInitial());
+			    }else {
+			    	uriVariables.put("dateFinal", "-");
+			    }
+			    
+				
+				//validateEmptyFilters(sortOrder);
 				
 				
-				uri.append(maxResults + "/");
-				uri.append(first + "/");
-				/*
+				
+				/*Map<String, String> uriVariables = new HashMap<>();
+				if(filter.getFilterTitle() != null && !filter.getFilterTitle().equals("")) {
+					uriVariables.put("title", filter.getFilterTitle());
+				}
+				if(filter.getDateInitial() != null) {
+					uriVariables.put("dataInitial", filter.getD);
+				}
 				uri.append(filter.getFilterTitle() + "/");
 				uri.append(filter.isFilterStatus() + "/");
 				
@@ -127,7 +165,7 @@ public class TaskMB extends BaseBeans{
 				    ResponseEntity<TaskTransferDTO> retornoTaskTransfer = null;
 					template = new RestTemplate();
 					
-					retornoTaskTransfer = template.getForEntity(hostPath + uri.toString() +"2", TaskTransferDTO.class);
+					retornoTaskTransfer = template.getForEntity(hostPath + uri.toString(), TaskTransferDTO.class, uriVariables);
 					
 					TaskTransferDTO taskTransferDTO = retornoTaskTransfer.getBody();
 				    
@@ -200,7 +238,7 @@ public class TaskMB extends BaseBeans{
 		ResponseEntity<PersonTransferDTO> respPersons = null;
 		template = new RestTemplate();
 		
-		respPersons = template.getForEntity(hostPath + "/persons/list", PersonTransferDTO.class);
+		respPersons = template.getForEntity(hostPath + "/persons/list/-/-", PersonTransferDTO.class);
 		
 		PersonTransferDTO personTransferDTO = respPersons.getBody();
 		

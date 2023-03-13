@@ -3,6 +3,7 @@ package br.com.avaliacao.managedBean;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,14 +68,19 @@ public class PersonMB extends BaseBeans{
 			public List<Person> load(int first, int maxResults, String sortField,
 					SortOrder sortOrder, Map<String, String> filters) {
 				
+				cleanList();
 				
 				StringBuilder uri = new StringBuilder();
-				uri.append("/persons/list/");
+				uri.append("/persons/list/{name}/{email}");
+				
+				Map<String, Object> uriVariables = new HashMap<String, Object>();
+				
+				generateFilters(uriVariables);
 				
 			    ResponseEntity<PersonTransferDTO> retornoPersonTransfer = null;
 				template = new RestTemplate();
 				
-				retornoPersonTransfer = template.getForEntity(hostPath + uri.toString(), PersonTransferDTO.class);
+				retornoPersonTransfer = template.getForEntity(hostPath + uri.toString(), PersonTransferDTO.class, uriVariables);
 				
 				PersonTransferDTO personTransferDTO = retornoPersonTransfer.getBody();
 				
@@ -87,11 +93,31 @@ public class PersonMB extends BaseBeans{
 						person.setId(personDTO.getId());
 						persons.add(person);
 					}
+				}else {
+					cleanList();
 				}
 				
 				setRowCount(persons.size());
 				
 				return persons;
+			}
+
+			private void cleanList() {
+				persons = new ArrayList<Person>();
+			}
+
+			private void generateFilters(Map<String, Object> uriVariables) {
+				if(filter.getFilterName() !=  null && !filter.getFilterName().equals("")) {
+					uriVariables.put("name", filter.getFilterName());
+				}else {
+					uriVariables.put("name","-");
+				}
+				
+				if(filter.getFilterEmail() !=  null && !filter.getFilterEmail().equals("")) {
+					uriVariables.put("email", filter.getFilterEmail());
+				}else {
+					uriVariables.put("email","-");
+				}
 			}
 			
 			private void validateEmptyFilters(SortOrder sortOrder) {
@@ -107,11 +133,6 @@ public class PersonMB extends BaseBeans{
 					}
 				}
 				
-				if(filter.getFilterCPF() != null){
-					if(filter.getFilterCPF().equals("")){
-						filter.setFilterCPF(null);
-					}
-				}
 				
 				if(filter.getFilterEmail() != null){
 					if(filter.getFilterEmail().equals("")){

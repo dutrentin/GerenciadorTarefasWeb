@@ -44,8 +44,9 @@
 						    	    <p:selectBooleanButton id="flagStatus" value="#{taskMB.task.status}" onLabel="Ativo" offLabel="Inativo" style="width:60px" />
 						        </p:column>
 						         <p:column >
+						        	 <p:outputLabel>Pessoa*</p:outputLabel><br></br>
 							        <p:autoComplete style="width: 200px "
-	                                       id="filterUser"
+	                                       id="filterPerson"
 	                                       autoHighlight="true"
 	                                       required="true"
 	                                       value="#{taskMB.personSelected.id}"

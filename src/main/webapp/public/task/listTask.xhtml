@@ -32,6 +32,35 @@
 							            <f:selectItem itemLabel="Inativos" itemValue="false" />
 							        </p:selectOneMenu>
 						        </p:column>
+						        <p:column >
+						        	 <p:outputLabel>Pessoa*</p:outputLabel><br></br>
+							        <p:autoComplete style="width: 200px "
+	                                       id="filterPerson"
+	                                       autoHighlight="true"
+	                                       required="true"
+	                                       value="#{taskMB.personSelected.id}"
+	                                       dropdown="true"
+	                                       completeMethod="#{taskMB.completeTextPerson}"
+	                                       var="person"
+	                                       itemLabel="#{person.name}"
+	                                       itemValue="#{person.id}"
+	                                       forceSelection="true"
+	                                       minQueryLength="2"
+	                                       queryDelay="500">
+	                               </p:autoComplete>
+                              	 </p:column>
+                               </p:row>
+                               <p:row>
+						        <p:column >
+						    	    <p:outputLabel>Data Início</p:outputLabel><br></br>
+						        	  <p:calendar id="calDtInitial" value="#{taskMB.filter.dateInitial}" yearRange="c-100:c+0" 	locale="pt_BR"
+						        	 	showOtherMonths="true"  navigator="true" pattern="dd/MM/yyyy"  styleClass="form-control input-lg input-custom-cal" showOn="button" />
+						        </p:column>
+						        <p:column >
+						    	    <p:outputLabel>Data Fim</p:outputLabel><br></br>
+						        	  <p:calendar id="calDtFinal" value="#{taskMB.filter.dateFinal}" yearRange="c-100:c+0" 	locale="pt_BR"
+						        	 	showOtherMonths="true"  navigator="true" pattern="dd/MM/yyyy"  styleClass="form-control input-lg input-custom-cal" showOn="button" />
+						        </p:column>
 						    </p:row>
 				    	</p:panelGrid>
 					</p:fieldset>

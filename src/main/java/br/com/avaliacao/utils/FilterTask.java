@@ -11,6 +11,8 @@ public class FilterTask implements Serializable{
 	private boolean filterStatus;
 	private Date creationDate;
 	private Date dateConclusion;
+	private Date dateInitial;
+    private Date dateFinal;
 	private int maxResults;
 	private int currentPage;
 	private String order;
@@ -61,6 +63,24 @@ public class FilterTask implements Serializable{
 	public void setDateConclusion(Date dateConclusion) {
 		this.dateConclusion = dateConclusion;
 	}
+
+	public Date getDateInitial() {
+		return dateInitial;
+	}
+
+	public void setDateInitial(Date dateInitial) {
+		this.dateInitial = dateInitial;
+	}
+
+	public Date getDateFinal() {
+		return dateFinal;
+	}
+
+	public void setDateFinal(Date dateFinal) {
+		this.dateFinal = dateFinal;
+	}
+	
+	
 	
      
 }
