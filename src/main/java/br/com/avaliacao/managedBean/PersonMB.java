@@ -1,7 +1,6 @@
 package br.com.avaliacao.managedBean;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,15 +11,11 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.ws.rs.client.WebTarget;
 
 import br.com.avaliacao.dto.PersonDTO;
 import br.com.avaliacao.dto.PersonTransferDTO;
-import br.com.avaliacao.dto.TaskTransferDTO;
 import br.com.avaliacao.model.Person;
-import br.com.avaliacao.model.Task;
 import br.com.avaliacao.utils.FilterPerson;
-import br.com.avaliacao.utils.FilterTask;
 import br.com.avaliacao.utils.LoadConfigs;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
@@ -38,7 +33,6 @@ public class PersonMB extends BaseBeans{
 	private FilterPerson filter;
 	private String hostPath;
 	private String filtroNome;
-	private SimpleDateFormat formatter = new SimpleDateFormat("dd_MM_yyyy");
 	private RestTemplate template = new RestTemplate();
 	
 	private LazyDataModel<Person> model;
@@ -84,17 +78,23 @@ public class PersonMB extends BaseBeans{
 				
 				PersonTransferDTO personTransferDTO = retornoPersonTransfer.getBody();
 				
-				if(personTransferDTO != null && personTransferDTO.getPersons() != null && !personTransferDTO.getPersons().isEmpty()) {
-					for(PersonDTO personDTO : personTransferDTO.getPersons()) {
-						Person person = new Person();
-						person.setAtivo(true);
-						person.setEmail(personDTO.getEmail());
-						person.setName(personDTO.getName());
-						person.setId(personDTO.getId());
-						persons.add(person);
+				try {
+				
+					if(personTransferDTO != null && personTransferDTO.getPersons() != null && !personTransferDTO.getPersons().isEmpty()) {
+						for(PersonDTO personDTO : personTransferDTO.getPersons()) {
+							Person person = new Person();
+							person.setAtivo(true);
+							person.setEmail(personDTO.getEmail());
+							person.setName(personDTO.getName());
+							person.setId(personDTO.getId());
+							persons.add(person);
+						}
+					}else {
+						cleanList();
 					}
-				}else {
-					cleanList();
+				}catch (Exception e) {
+					e.printStackTrace();
+					getMessageErrorConnect();
 				}
 				
 				setRowCount(persons.size());
@@ -120,26 +120,6 @@ public class PersonMB extends BaseBeans{
 				}
 			}
 			
-			private void validateEmptyFilters(SortOrder sortOrder) {
-				if(SortOrder.ASCENDING.equals(sortOrder)){
-					filter.setOrder("ASC");
-				}else{
-					filter.setOrder("DESC");
-				}
-				
-				if(filter.getFilterName() != null){
-					if(filter.getFilterName().equals("")){
-						filter.setFilterName(null);
-					}
-				}
-				
-				
-				if(filter.getFilterEmail() != null){
-					if(filter.getFilterEmail().equals("")){
-						filter.setFilterEmail(null);
-					}
-				}
-			}
 		};
 	}
 	

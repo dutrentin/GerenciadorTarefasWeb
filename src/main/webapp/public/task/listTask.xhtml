@@ -22,20 +22,13 @@
 						    <p:row>
 						        <p:column>
 						        	<p:outputLabel>Descrição</p:outputLabel><br></br>
-						        	<p:inputText value="#{taskMB.filter.filterTitle}" id="txtNome"
+						        	<p:inputText value="#{taskMB.filter.filterTitle}" id="txtNome" style="height:17px !important"
 									      	placeholder="Filtre por descrição. (Digite enter para enviar o comando de busca)" styleClass="form-control input-lg input-custom" />
 								</p:column>
 						        <p:column >
-						    	    <p:outputLabel>Situação</p:outputLabel><br></br>
-						    	    <p:selectOneMenu id="console" value="#{taskMB.statusSelectedString}" styleClass="form-control input-select" style="width:125px">
-							            <f:selectItem itemLabel="Ativos" itemValue="true" />
-							            <f:selectItem itemLabel="Inativos" itemValue="false" />
-							        </p:selectOneMenu>
-						        </p:column>
-						        <p:column >
-						        	 <p:outputLabel>Pessoa</p:outputLabel><br></br>
+						        	<p:outputLabel>Pessoa</p:outputLabel><br></br>
 							        <p:autoComplete 
-										   size="50"
+										   size="50" styleClass="form-control input-lg input-custom"
 	                                       id="filterPerson"
 	                                       autoHighlight="true"
 	                                       value="#{taskMB.personSelected}"
@@ -105,31 +98,6 @@
 			                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
 			                    </h:outputText>
 		                    </p:column>
-		                    
-		                     <!--
-						    
-							<p:column width="5%" style="max-width:100px" >
-								<div align="center">
-								<p:commandLink action="#{taskMB.changeStatus()}" ajax="false" rendered="#{task.status == true}"
-									update="@form" >
-									 <p:confirm header="Confirmação" message="Deseja finalizar esta Tarefa?" icon="ui-icon-alert" />
-									<img src="#{request.contextPath}/resources/images/btn/btn_finalizar.png" 
-										width="94" height="34" />
-									<f:setPropertyActionListener value="#{task}" target="#{taskMB.task}" /> 
-								</p:commandLink>
-								<p:commandLink action="#{taskMB.changeStatus()}" ajax="false" rendered="#{task.status == false}"
-									update="@form" >
-									 <p:confirm header="Confirmação" message="Deseja finalizar esta Tarefa?" icon="ui-icon-alert" />
-									<img src="#{request.contextPath}/resources/images/btn/btn_reabrir.png" 
-										width="94" height="34" />
-									<f:setPropertyActionListener value="#{task}" target="#{taskMB.task}" /> 
-								</p:commandLink>
-								<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-							        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-							        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-							    </p:confirmDialog>
-								</div>
-							</p:column>
 							-->
 							
 						    <p:column width="5%" style="max-width:30px" >

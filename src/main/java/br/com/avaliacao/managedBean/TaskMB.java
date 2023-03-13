@@ -3,7 +3,6 @@ package br.com.avaliacao.managedBean;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,11 +77,8 @@ public class TaskMB extends BaseBeans{
 		}
 		if(!isEdit){
 			task = new Task();
-		}else {
-			//if(task != null) {
-				//personSelected = task.getPerson();
-			//}
 		}
+		
 		updateDataTable();
 		
 	}
@@ -225,6 +221,7 @@ public class TaskMB extends BaseBeans{
 	public String saveOrEdit(){
 		boolean returnMethod = true;
 		if(task != null){
+			task.setStatus(true);
 			if(task.getId() == null || task.getId() == 0){
 				returnMethod = saveMethod();
 			}else{
@@ -283,10 +280,6 @@ public class TaskMB extends BaseBeans{
 		ResponseEntity<Task> respTask = null;
 		try{
 			template = new RestTemplate();
-			UriComponents uri = UriComponentsBuilder.newInstance()
-					.host(hostPath)
-					.path("/tasks/save")
-					.build();
 			
 			task.setPerson(returnPersonById());
 			
@@ -331,6 +324,8 @@ public class TaskMB extends BaseBeans{
 			template = new RestTemplate();
 	
 			template.delete(hostPath + uri.toString());
+			
+			getMessageDeleteSuccess();
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -385,27 +380,6 @@ public class TaskMB extends BaseBeans{
 	}
 	
 
-	private boolean returnEditMethod(boolean ehEdicao, Response response) {
-		if(response != null){
-			if(response.getStatus() == UtilsEnum.OK.value || response.getStatus() == UtilsEnum.CRIADO.value){
-				if(ehEdicao){
-					getMessageEditSuccess();
-				}else{
-					getMessageDeleteSuccess();
-				}
-			}else{
-				if(ehEdicao){
-					getMessageEditError();
-				}else{
-					getMessageDeleteError();
-				}
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	
 	private void getMessageAddSuccess() {
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,"Tarefa cadastrada com sucesso!",null);
 		FacesContext.getCurrentInstance().addMessage("Sucess Message ", msg);
