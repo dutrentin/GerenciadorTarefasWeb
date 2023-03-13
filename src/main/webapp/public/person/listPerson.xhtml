@@ -32,21 +32,28 @@
 <!-- 									 	 <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" /> -->
 									 </p:inputText>
 						        </p:column>
-						        <p:column >
+						        <!--<p:column >
 						    	    <p:outputLabel>Situação*</p:outputLabel><br></br>
-						    	    <p:selectBooleanButton id="flagStatus" value="#{personMB.filter.status}" onLabel="Ativo" offLabel="Inativo" style="width:60px" />
-						        </p:column>
+						    	    <p:selectBooleanButton id="flagStatus" value="#{personMB.filter.filterEmail}" onLabel="Ativo" offLabel="Inativo" style="width:60px" />
+						        </p:column> -->
 						    </p:row>
 				    	</p:panelGrid>
 					
 					</p:fieldset>
 					<p:messages id="messages2" showDetail="false" autoUpdate="true" closable="true" />
-					<div align="left">
-						  <h:commandButton  actionListener="#{personMB.updateDataTable}" style="visibility: hidden" ajax="false" styleClass="btn-primary"
+					<br></br>
+					<div align="left" style="margin-left: -13px">
+						  <h:commandButton  actionListener="#{personMB.updateDataTable}" ajax="false" styleClass="btn-primary"
 								 title="Filtrar" id="btnFilter" value="Filtrar" />
-<!-- 								 <p:inputText value="#{personMB.filter.filterName}" id="txtNome2" -->
-<!-- 									      	placeholder="Filtre por nome" styleClass="form-control input-lg input-custom" /> -->
+
+	 					  <h:commandButton  actionListener="#{personMB.cleanFilters()}" ajax="false" styleClass="btn-primary"
+						 		 title="Limpar" id="btnClean" value="Limpar" />
 					</div>
+					 <div align="right" style="margin-right: 13px">
+						  <h:commandButton  action="#{personMB.redirectCadPerson()}" ajax="false" styleClass="btn-primary"
+								 title="Cadastrar" id="btnNew" value="Cadastrar" />
+					</div>
+					
 					
 					<br></br>
 					<div align="center">

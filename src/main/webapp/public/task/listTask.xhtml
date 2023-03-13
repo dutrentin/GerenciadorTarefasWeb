@@ -33,8 +33,9 @@
 							        </p:selectOneMenu>
 						        </p:column>
 						        <p:column >
-						        	 <p:outputLabel>Pessoa*</p:outputLabel><br></br>
-							        <p:autoComplete style="width: 200px "
+						        	 <p:outputLabel>Pessoa</p:outputLabel><br></br>
+							        <p:autoComplete 
+										   size="50"
 	                                       id="filterPerson"
 	                                       autoHighlight="true"
 	                                       value="#{taskMB.personSelected}"
@@ -71,6 +72,12 @@
 				    <div align="left" style="margin-left: -13px">
 						  <h:commandButton  actionListener="#{taskMB.updateDataTable}" ajax="false" styleClass="btn-primary"
 								 title="Filtrar" id="btnFilter" value="Filtrar" />
+						  <h:commandButton  actionListener="#{taskMB.clean}" ajax="false" styleClass="btn-primary"
+								 title="Limpar" id="btnClean" value="Limpar" />
+					</div>
+					  <div align="right" style="margin-right: 13px">
+						  <h:commandButton  action="#{taskMB.redirectCadTask()}" ajax="false" styleClass="btn-primary"
+								 title="Cadastrar" id="btnNew" value="Cadastrar" />
 					</div>
 					
 					<br></br>
@@ -82,7 +89,7 @@
 							
 							
 							<p:column headerText="Pessoa" style="width: 150px">
-						        <h:outputText value="#{task.title}" />
+						        <h:outputText value="#{task.person.name}" />
 						    </p:column>
 						    
 						    <p:column headerText="Tarefa" style="width: 200px">
@@ -93,9 +100,13 @@
 						    	<h:outputText value="#{task.description}" />
 						    </p:column>
 						    
-						     <h:outputText value="#{task.dateTask}" style="width: 150px">
-		                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
-		                    </h:outputText>
+						    <p:column headerText="Data da Tarefa">
+							     <h:outputText value="#{task.dateTask}" style="width: 150px">
+			                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
+			                    </h:outputText>
+		                    </p:column>
+		                    
+		                     <!--
 						    
 							<p:column width="5%" style="max-width:100px" >
 								<div align="center">
@@ -119,6 +130,7 @@
 							    </p:confirmDialog>
 								</div>
 							</p:column>
+							-->
 							
 						    <p:column width="5%" style="max-width:30px" >
 								<f:facet name="header">
@@ -141,7 +153,7 @@
 								</f:facet>
 								<div align="center">
 								<p:commandLink action="#{taskMB.delete}" title="Excluir">
-									 <p:confirm header="Confirmação" message="Deseja remover esta pessoa?" icon="ui-icon-alert" />
+									 <p:confirm header="Confirmação" message="Deseja remover esta tarefa?" icon="ui-icon-alert" />
 									<img src="#{request.contextPath}/resources/images/btn/delete.png"
 										width="24" height="24" />
 									<f:setPropertyActionListener value="#{task}" target="#{taskMB.task}" /> 

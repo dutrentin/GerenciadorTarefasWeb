@@ -45,9 +45,10 @@
 						        </p:column>
 						         <p:column >
 						        	 <p:outputLabel>Pessoa*</p:outputLabel><br></br>
-							        <p:autoComplete style="width: 200px "
+							        <p:autoComplete 
+							        	   size="50"
 	                                       id="filterPerson"
-	                                       autoHighlight="true"
+	                                       autoHighlight="true" 
 	                                       required="true"
 	                                       value="#{taskMB.personSelected.id}"
 	                                       dropdown="true"
@@ -66,8 +67,8 @@
 						     	<p:column >
 						    	    <p:outputLabel>Data da Tarefa.*</p:outputLabel><br></br>
 						        	  <p:calendar id="button" value="#{taskMB.task.dateTask}" yearRange="c-100:c+0" 	locale="pt_BR"
-						        	    required="true" requiredMessage="Informe a data da tarefa"
-						        	 	showOtherMonths="true"  navigator="true" pattern="dd/MM/yyyy"  styleClass="form-control input-lg input-custom-cal" showOn="button" />
+						        	    required="true" requiredMessage="Informe a data da tarefa" 
+						        	 	showOtherMonths="true"  navigator="true" pattern="dd/MM/yyyy HH:mm:ss"  styleClass="form-control input-lg input-custom-cal" showOn="button" />
 						        </p:column>
 						     
 						     </p:row>
@@ -79,6 +80,8 @@
 	                <br></br>
 						  <h:commandButton  action="#{taskMB.saveOrEdit}"  ajax="false" styleClass="btn-primary"
 								 title="Salvar" id="botaoSalvar" value="Salvar" />
+						  <h:commandButton  action="#{taskMB.redirectListTask()}"  ajax="false" styleClass="btn-primary" immediate="true"
+								 title="Salvar" id="botaoVoltar" value="Voltar" />
 					</div>
 				</h:form>
 		</div>

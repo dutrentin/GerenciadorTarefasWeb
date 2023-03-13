@@ -54,7 +54,6 @@ public class TaskMB extends BaseBeans{
 	private Task task;
 	private RestTemplate template = new RestTemplate();
 	
-	private Integer selectedPerson;
 	private Person personSelected;
 	
 	@PostConstruct
@@ -79,8 +78,13 @@ public class TaskMB extends BaseBeans{
 		}
 		if(!isEdit){
 			task = new Task();
+		}else {
+			//if(task != null) {
+				//personSelected = task.getPerson();
+			//}
 		}
 		updateDataTable();
+		
 	}
 	
 	public void updateDataTable(){
@@ -108,7 +112,12 @@ public class TaskMB extends BaseBeans{
 				
 				uriVariables.put("max", String.valueOf(maxResults));
 				uriVariables.put("page", first);
-				uriVariables.put("idPerson", personSelected.getId() != null ? personSelected.getId() : 0);
+				if(personSelected == null || personSelected.getId() == null) {
+					uriVariables.put("idPerson", 0);
+				}else {
+					uriVariables.put("idPerson", personSelected.getId());
+					
+				}
 			    
 			    if(filter.getFilterTitle() != null && !filter.getFilterTitle().equals("")) {
 			    	uriVariables.put("title", filter.getFilterTitle());
@@ -124,8 +133,7 @@ public class TaskMB extends BaseBeans{
 			    }
 			    
 			    if(filter.getDateFinal() != null) {
-			    	uriVariables.put("dateInitial", formatter.format(filter.getDateFinal()));
-			    	uriVariables.put("dateFinal",filter.getDateInitial());
+			    	uriVariables.put("dateFinal", formatter.format(filter.getDateFinal()));
 			    }else {
 			    	uriVariables.put("dateFinal", "-");
 			    }
@@ -178,6 +186,15 @@ public class TaskMB extends BaseBeans{
 				    		task.setId(taskDTO.getId());
 				    		task.setDescription(taskDTO.getDescription());
 				    		task.setTitle(taskDTO.getTitle());
+				    		task.setDateTask(taskDTO.getDateTask());
+				    		
+				    		Person person = new Person();
+				    		person.setEmail(taskDTO.getPerson().getEmail());
+				    		person.setName(taskDTO.getPerson().getName());
+				    		person.setId(taskDTO.getPerson().getId());
+				    		
+				    		task.setPerson(person);
+				    		
 				    		//task.setDateLastEdited(null)
 				    		task.setStatus(true);
 				    		
@@ -432,6 +449,7 @@ public class TaskMB extends BaseBeans{
 	public void clean(){
 		filter = new FilterTask();
 		task = new Task();
+		personSelected = new Person();
 	}
 	
 	private Person returnPersonById() {
@@ -488,14 +506,6 @@ public class TaskMB extends BaseBeans{
 	}
 	public void setEdit(boolean isEdit) {
 		this.isEdit = isEdit;
-	}
-
-	public Integer getSelectedPerson() {
-		return selectedPerson;
-	}
-
-	public void setSelectedPerson(Integer selectedPerson) {
-		this.selectedPerson = selectedPerson;
 	}
 
 	public Person getPersonSelected() {

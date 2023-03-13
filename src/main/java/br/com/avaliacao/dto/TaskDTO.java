@@ -2,14 +2,17 @@ package br.com.avaliacao.dto;
 
 import java.util.Date;
 
+import br.com.avaliacao.model.Person;
+
 public class TaskDTO {
     private Long id;
     private String title;
     private boolean status;
     private String description;
     private Date creationDate;
-    private Date dateLastEdited;
+    private Date dateTask;
     private Date dateConclusion;
+    private PersonDTO person;
 
     public Long getId() {
         return id;
@@ -51,12 +54,12 @@ public class TaskDTO {
         this.creationDate = creationDate;
     }
 
-    public Date getDateLastEdited() {
-        return dateLastEdited;
+    public Date getDateTask() {
+        return dateTask;
     }
 
-    public void setDateLastEdited(Date dateLastEdited) {
-        this.dateLastEdited = dateLastEdited;
+    public void setDateTask(Date dateTask) {
+        this.dateTask = dateTask;
     }
 
     public Date getDateConclusion() {
@@ -66,4 +69,14 @@ public class TaskDTO {
     public void setDateConclusion(Date dateConclusion) {
         this.dateConclusion = dateConclusion;
     }
+
+	public PersonDTO getPerson() {
+		return person;
+	}
+
+	public void setPerson(PersonDTO person) {
+		this.person = person;
+	}
+    
+    
 }
