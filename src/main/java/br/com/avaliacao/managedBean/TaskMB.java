@@ -202,19 +202,6 @@ public class TaskMB extends BaseBeans{
 				return tasks;
 			}
 			
-			private void validateEmptyFilters(SortOrder sortOrder) {
-				if(SortOrder.ASCENDING.equals(sortOrder)){
-					filter.setOrder("ASC");
-				}else{
-					filter.setOrder("DESC");
-				}
-				
-				if(filter.getFilterTitle() != null){
-					if(filter.getFilterTitle().equals("")){
-						filter.setFilterTitle(null);
-					}
-				}
-			}
 		};
 	}
 	
@@ -338,15 +325,21 @@ public class TaskMB extends BaseBeans{
 	public boolean edit(){
 		try{
 			StringBuilder uri = new StringBuilder();
+			
 			uri.append("/tasks/update");
+			
+			task.setPerson(personSelected);
 			
 			template = new RestTemplate();
 	
 			template.put(hostPath + uri.toString(), task);
 			
+			getMessageEditSuccess();	
+			
+			redirectListTask();
 		}catch(Exception ex){
 			ex.printStackTrace();
-				getMessageEditError();
+			getMessageEditError();
 			return false;
 		}
 		

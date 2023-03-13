@@ -37,13 +37,13 @@
 							        <p:autoComplete style="width: 200px "
 	                                       id="filterPerson"
 	                                       autoHighlight="true"
-	                                       required="true"
-	                                       value="#{taskMB.personSelected.id}"
+	                                       value="#{taskMB.personSelected}"
 	                                       dropdown="true"
+	                                       converter="entityConverter"
 	                                       completeMethod="#{taskMB.completeTextPerson}"
 	                                       var="person"
 	                                       itemLabel="#{person.name}"
-	                                       itemValue="#{person.id}"
+	                                       itemValue="#{person}"
 	                                       forceSelection="true"
 	                                       minQueryLength="2"
 	                                       queryDelay="500">
@@ -51,17 +51,19 @@
                               	 </p:column>
                                </p:row>
                                <p:row>
-						        <p:column >
+						        <p:column>
 						    	    <p:outputLabel>Data Início</p:outputLabel><br></br>
 						        	  <p:calendar id="calDtInitial" value="#{taskMB.filter.dateInitial}" yearRange="c-100:c+0" 	locale="pt_BR"
-						        	 	showOtherMonths="true"  navigator="true" pattern="dd/MM/yyyy"  styleClass="form-control input-lg input-custom-cal" showOn="button" />
-						        </p:column>
-						        <p:column >
-						    	    <p:outputLabel>Data Fim</p:outputLabel><br></br>
-						        	  <p:calendar id="calDtFinal" value="#{taskMB.filter.dateFinal}" yearRange="c-100:c+0" 	locale="pt_BR"
-						        	 	showOtherMonths="true"  navigator="true" pattern="dd/MM/yyyy"  styleClass="form-control input-lg input-custom-cal" showOn="button" />
+						        	 	showOtherMonths="true"  navigator="true" pattern="dd/MM/yyyy HH:mm:ss"  styleClass="form-control input-lg input-custom-cal" showOn="button" />
 						        </p:column>
 						    </p:row>
+						     <p:row>
+						    	 <p:column>
+							    	  <p:outputLabel>Data Fim</p:outputLabel><br></br>
+							        	  <p:calendar id="calDtFinal" value="#{taskMB.filter.dateFinal}" yearRange="c-100:c+0" 	locale="pt_BR"
+							        	 	showOtherMonths="true"  navigator="true" pattern="dd/MM/yyyy HH:mm:ss"  styleClass="form-control input-lg input-custom-cal" showOn="button" />
+						    	 </p:column>
+						     </p:row>
 				    	</p:panelGrid>
 					</p:fieldset>
 					<p:messages id="messages2" showDetail="false" autoUpdate="true" closable="true" />
@@ -78,17 +80,22 @@
 							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} "
 							currentPageReportTemplate="(Pessoas: {startRecord} - {endRecord} de total: {totalRecords} -  Página: {currentPage}/{totalPages})" >
 							
-						    <p:column headerText="Nome">
+							
+							<p:column headerText="Pessoa" style="width: 150px">
 						        <h:outputText value="#{task.title}" />
 						    </p:column>
 						    
-						    <p:column headerText="E-mail">
-						    	<div align="center">
-						       	    <h:outputText value="Ativo" rendered="#{task.status == true}" />
-						       	    <h:outputText value="Inativo" rendered="#{task.status == false}" />
-						        </div>
+						    <p:column headerText="Tarefa" style="width: 200px">
+						        <h:outputText value="#{task.title}" />
 						    </p:column>
 						    
+						    <p:column headerText="Descrição">
+						    	<h:outputText value="#{task.description}" />
+						    </p:column>
+						    
+						     <h:outputText value="#{task.dateTask}" style="width: 150px">
+		                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
+		                    </h:outputText>
 						    
 							<p:column width="5%" style="max-width:100px" >
 								<div align="center">
